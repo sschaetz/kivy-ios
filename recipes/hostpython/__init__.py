@@ -6,8 +6,8 @@ import shutil
 
 
 class HostpythonRecipe(Recipe):
-    version = "2.7.1"
-    url = "https://www.python.org/ftp/python/{version}/Python-{version}.tar.bz2"
+    version = "3.4.3"
+    url = "https://www.python.org/ftp/python/{version}/Python-{version}.tgz"
     depends = ["hostlibffi", ]
     archs = ["x86_64"]
 
@@ -22,9 +22,9 @@ class HostpythonRecipe(Recipe):
         if  self.has_marker("patched"):
             return
         self.copy_file("_scproxy.py", "Lib/_scproxy.py")
-        self.apply_patch("ssize-t-max.patch")
-        self.apply_patch("dynload.patch")
-        self.apply_patch("static-_sqlite3.patch")
+        #self.apply_patch("ssize-t-max.patch")
+        #self.apply_patch("dynload.patch")
+        #self.apply_patch("static-_sqlite3.patch")
         self.copy_file("ModulesSetup", "Modules/Setup.local")
         self.set_marker("patched")
 
@@ -78,7 +78,7 @@ class HostpythonRecipe(Recipe):
                 "-C", build_dir,
                 "bininstall", "inclinstall",
                 _env=build_env)
-        pylib_dir = join(self.ctx.dist_dir, "hostpython", "lib", "python2.7")
+        pylib_dir = join(self.ctx.dist_dir, "hostpython", "lib", "python3.4")
         if exists(pylib_dir):
             shutil.rmtree(pylib_dir)
         shutil.copytree(

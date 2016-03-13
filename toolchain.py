@@ -200,7 +200,7 @@ class Arch64IOS(Arch):
     triple = "aarch64-apple-darwin13"
     version_min = "-miphoneos-version-min=7.0"
     sysroot = sh.xcrun("--sdk", "iphoneos", "--show-sdk-path").strip()
-    
+
 
 class Graph(object):
     # Taken from python-for-android/depsort
@@ -608,7 +608,7 @@ class Recipe(object):
                 shutil.copytree(src_dir, dest_dir)
                 return
             ensure_dir(build_dir)
-            self.extract_file(self.archive_fn, build_dir) 
+            self.extract_file(self.archive_fn, build_dir)
 
     @cache_execution
     def build(self, arch):
@@ -1014,13 +1014,13 @@ def update_pbxproj(filename):
 
 if __name__ == "__main__":
     import argparse
-    
+
     class ToolchainCL(object):
         def __init__(self):
             parser = argparse.ArgumentParser(
                     description="Tool for managing the iOS / Python toolchain",
                     usage="""toolchain <command> [<args>]
-                    
+
 Available commands:
     build         Build a specific recipe
     clean         Clean the build
@@ -1037,7 +1037,7 @@ Xcode:
             parser.add_argument("command", help="Command to run")
             args = parser.parse_args(sys.argv[1:2])
             if not hasattr(self, args.command):
-                print 'Unrecognized command'
+                print('Unrecognized command')
                 parser.print_help()
                 exit(1)
             getattr(self, args.command)()
@@ -1079,9 +1079,14 @@ Xcode:
             else:
                 ctx = Context()
                 for name in Recipe.list_recipes():
-                    recipe = Recipe.get_recipe(name, ctx)
-                    print("{recipe.name:<12} {recipe.version:<8}".format(
-                          recipe=recipe))
+                    print(name)
+                    try:
+                        recipe = Recipe.get_recipe(name, ctx)
+                        print("{recipe.name:<12} {recipe.version:<8}".format(
+                               recipe=recipe))
+                    except:
+                        pass
+
 
         def clean(self):
             parser = argparse.ArgumentParser(
@@ -1135,7 +1140,7 @@ Xcode:
             parser.add_argument("name", help="Name of your project")
             parser.add_argument("directory", help="Directory where your project live")
             args = parser.parse_args(sys.argv[2:])
-            
+
             from cookiecutter.main import cookiecutter
             ctx = Context()
             template_dir = join(curdir, "tools", "templates")

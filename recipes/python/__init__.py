@@ -5,16 +5,16 @@ import os
 
 
 class PythonRecipe(Recipe):
-    version = "2.7.1"
-    url = "https://www.python.org/ftp/python/{version}/Python-{version}.tar.bz2"
+    version = "3.4.3"
+    url = "https://www.python.org/ftp/python/{version}/Python-{version}.tgz"
     depends = ["hostpython", "libffi", ]
     optional_depends = ["openssl"]
-    library = "libpython2.7.a"
+    library = "libpython3.4.3.a"
     pbx_libraries = ["libz", "libbz2", "libsqlite3"]
 
     def init_with_ctx(self, ctx):
         super(PythonRecipe, self).init_with_ctx(ctx)
-        self.ctx.python_ver_dir = "python2.7"
+        self.ctx.python_ver_dir = "python3.4"
         self.ctx.site_packages_dir = join(
             ctx.dist_dir, "root", "python", "lib", ctx.python_ver_dir,
             "site-packages")
@@ -23,9 +23,9 @@ class PythonRecipe(Recipe):
         # common to all archs
         if  self.has_marker("patched"):
             return
-        self.apply_patch("ssize-t-max.patch")
-        self.apply_patch("dynload.patch")
-        self.apply_patch("static-_sqlite3.patch")
+        #self.apply_patch("ssize-t-max.patch")
+        #self.apply_patch("dynload.patch")
+        #self.apply_patch("static-_sqlite3.patch")
         self.copy_file("ModulesSetup", "Modules/Setup.local")
         self.copy_file("_scproxy.py", "Lib/_scproxy.py")
         self.apply_patch("xcompile.patch")
@@ -120,8 +120,8 @@ class PythonRecipe(Recipe):
             sh.rm("-rf", "bin")
             os.chdir(join(self.ctx.dist_dir, "root", "python", "lib"))
             sh.rm("-rf", "pkgconfig")
-            sh.rm("libpython2.7.a")
-            os.chdir(join(self.ctx.dist_dir, "root", "python", "lib", "python2.7"))
+            sh.rm("libpython3.4.3.a")
+            os.chdir(join(self.ctx.dist_dir, "root", "python", "lib", "python3.4"))
             sh.find(".", "-iname", "*.pyc", "-exec", "rm", "{}", ";")
             sh.find(".", "-iname", "*.py", "-exec", "rm", "{}", ";")
             #sh.find(".", "-iname", "test*", "-exec", "rm", "-rf", "{}", ";")
@@ -129,15 +129,15 @@ class PythonRecipe(Recipe):
             sh.rm("-rf", sh.glob("lib*"))
 
             # now create the zip.
-            print("Create a python27.zip")
-            sh.rm("config/libpython2.7.a")
+            print("Create a python34.zip")
+            sh.rm("config/libpython3.4.a")
             sh.rm("config/python.o")
             sh.rm("config/config.c.in")
             sh.rm("config/makesetup")
             sh.rm("config/install-sh")
             sh.mv("config", "..")
             sh.mv("site-packages", "..")
-            sh.zip("-r", "../python27.zip", sh.glob("*"))
+            sh.zip("-r", "../python34.zip", sh.glob("*"))
             sh.rm("-rf", sh.glob("*"))
             sh.mv("../config", ".")
             sh.mv("../site-packages", ".")
