@@ -1,3 +1,5 @@
+THIS IS WIP. THE BUILD SCRIPT IS BROKEN!
+
 Kivy for iOS
 ============
 
